@@ -60,3 +60,49 @@ x_{ik} \geq 0, \quad i = 1, \ldots, 2, \quad k = 1, \ldots, 2
 \begin{equation}
 I_{it} \geq 0 \quad i = 1, \ldots, 2, \quad t = 1, \ldots, 3
 \end{equation}
+
+Produção de Tipos por padrão
+
+Variáveis de decisão:
+xkt  = quantidade do padrao  k  produzidas na semana  t 
+
+Eit  = quantidade de itens do tipo  i  em estoque ao final da semana  t 
+
+Parâmetros (dados de entrada)
+aik  = quantidade de chapas do  i  produzidas no padrão  k 
+
+cit  = custo de produção de uma unidade da chapa do tipo  i  no período  t 
+
+sit  = custo de estocar uma unidade da chapa do tipo  i  no período  t 
+
+dit  = demanda de chapas do tipo  i  no período  t 
+
+Ii  = quantidade inicial de chapas do tipo  i  (antes da semana 1)
+
+Obs.:  i=1…,2 ,  k=1,…,2 , e  t=1,...,3 
+
+Função objetivo
+
+Minimiza o custo de produção e custo de estoque
+
+Min∑i=12∑t=13[sitEit+cit∑k=12(aikxkt)] 
+
+Restrições
+
+R1: Calculo do estoque
+
+Semana 1:
+Ei1=Ii+xi1−di1,i=1,2 
+
+Demais semanas:
+Eit=∑b=1t(Eib−1+xib−dib)i=1,2,t=2,3 
+Observe que para as demais semanas, o t inicia em 2.
+
+-R2 : garante que a demanda de chapas do tipo i da semana t seja atendida
+
+∑k=12(aikxkt)≥dit,i=1,…,2,t=1,…3 
+
+Domínio das variáveis de decisão
+xik≥0,i=1,…,2,k=1,…,2 
+
+Iit≥0i=1,…,2,t=1,…,3
