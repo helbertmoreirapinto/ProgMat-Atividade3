@@ -11,11 +11,11 @@ def main():
     initial_lot_2 = 0
 
     # matrix with production costs
-    # p[i, j]= production costs of standard j in month i
+    # p[i, j]= production costs of standard j in month i 
     p = [
         [13, 9],  # Week1
         [10, 6],  # Week2
-        [20, 8]  # Week3
+        [20, 8]   # Week3
     ]
 
     # matrix with stock costs
@@ -23,37 +23,35 @@ def main():
     s = [
         [9, 7],  # Week1
         [9, 7],  # Week2
-        [9, 7]  # Week3
+        [9, 7]   # Week3
     ]
 
     # matrix with demands
-    # d[i,j]= demand of type j in month i
+    # d[i,j]= demand of type j in month i 
     d = [
         [2000, 2000],  # Week1
         [1500, 1700],  # Week2
-        [900, 1200]  # Week3
+        [900,  1200]   # Week3
     ]
 
     n_weeks = len(p)
     n_cut_types = 2
+    n_standards = 2
 
     # variables Xij
     # i -> week
     # j -> cut type
     x = {}
     for m in range(0, n_weeks):
-        for n in range(0, n_cut_types):
+        for n in range(0, n_standards):
             x[m, n] = solver.IntVar(0, solver.infinity(), 'week:%i type:%i' % (m+1, n+1))
 
-    # matrix of amount of pieces per week
-    # r[i,j]= amount of type j in month i
+    # matrix of amount of piences per week
+    # r[i,j]= amount of type j in month i 
     r = [
-        [x[0, 0] + 2 * x[0, 1] + initial_lot_1, 2 * x[0, 0] + 2 * x[0, 1] + initial_lot_2],
-        [x[1, 0] + 2 * x[1, 1] + (x[0, 0] + 2 * x[0, 1] + initial_lot_1 - d[0][0]),
-         2 * x[1, 0] + 2 * x[1, 1] + (2 * x[0, 0] + 2 * x[0, 1] + initial_lot_2 - d[0][1])],
-        [x[2, 0] + 2 * x[2, 1] + (x[1, 0] + 2 * x[1, 1] - d[1][0]) + (x[0, 0] + 2 * x[0, 1] + initial_lot_1 - d[0][0]),
-         2 * x[2, 0] + 2 * x[2, 1] + (
-                     2 * x[1, 0] + 2 * x[1, 1] - d[1][1] + 2 * x[0, 0] + 2 * x[0, 1] + initial_lot_2 - d[0][1])]
+        [x[0, 0] + 2 * x[0, 1] + initial_lot_1,                                                                         2 * x[0, 0] + 2 * x[0, 1] + initial_lot_2],
+        [x[1, 0] + 2 * x[1, 1] + (x[0, 0] + 2 * x[0, 1] + initial_lot_1 - d[0][0]),                                     2 * x[1, 0] + 2 * x[1, 1] + (2 * x[0, 0] + 2 * x[0, 1] + initial_lot_2 - d[0][1])],
+        [x[2, 0] + 2 * x[2, 1] + (x[1, 0] + 2 * x[1, 1] - d[1][0]) + (x[0, 0] + 2 * x[0, 1] + initial_lot_1 - d[0][0]), 2 * x[2, 0] + 2 * x[2, 1] + (2 * x[1, 0] + 2 * x[1, 1] - d[1][1] + 2 * x[0, 0] + 2 * x[0, 1] + initial_lot_2 - d[0][1])]
     ]
 
     # restrictions to attend demands
@@ -62,26 +60,27 @@ def main():
             solver.Add(r[m][n] >= d[m][n])
 
     # matrix of production costs per standard
-    # c[i,j]= production costs of type j in month i
+    # c[i,j]= production costs of standard j in month i 
     c = [
-        [p[0][0] + 2 * p[0][1], 2 * p[0][0] + 2 * p[0][1]],
-        [p[1][0] + 2 * p[1][1], 2 * p[1][0] + 2 * p[1][1]],
-        [p[2][0] + 2 * p[2][1], 2 * p[2][0] + 2 * p[2][1]]
+        [p[0][0] + 2*p[0][1], 2*p[0][0] + 2*p[0][1]],
+        [p[1][0] + 2*p[1][1], 2*p[1][0] + 2*p[1][1]],
+        [p[2][0] + 2*p[2][1], 2*p[2][0] + 2*p[2][1]]
     ]
 
     # matrix of stock type per month
-    # e[i,j]= stock type j in month i
-    e = [
+    # e[i,j]= stock type j in month i 
+    E = [
         [r[0][0] - d[0][0], r[0][1] - d[0][1]],
         [r[1][0] - d[1][0], r[1][1] - d[1][1]],
         [r[2][0] - d[2][0], r[2][1] - d[2][1]]
     ]
 
     # objective function - minimize costs
+    # product of costs of standard for quantity + product of costs of type for quantity
     objective_function = 0
     for m in range(0, n_weeks):
         for n in range(0, n_cut_types):
-            objective_function += (x[m, n] * c[m][n] + e[m][n] * s[m][n])
+            objective_function += (x[m, n] * c[m][n] + E[m][n] * s[m][n])
 
     solver.Minimize(objective_function)
 
