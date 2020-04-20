@@ -1,0 +1,62 @@
+**Produção de Tipos por padrão**
+
+- Variáveis de decisão:
+
+$x_{kt} $ = quantidade do padrao $k$ produzidas na semana $t$
+
+$E_{it}$ = quantidade de itens do tipo $i$ em estoque ao final da semana $t$
+
+- Parâmetros (dados de entrada)
+
+$a_{ik}$ = quantidade de chapas do $i$ produzidas no padrão $k$
+
+$c_{it}$ = custo de produção de uma unidade da chapa do tipo $i$ no período $t$
+
+$s_{it}$ = custo de estocar uma unidade da chapa do tipo $i$ no período $t$
+
+$d_{it}$ = demanda de chapas do tipo $i$ no período $t$
+
+$I_{i}$ = quantidade inicial de chapas do tipo $i$ (antes da semana 1)
+
+Obs.: $i = 1 \ldots, 2$, $k = 1, \ldots, 2$, e $t = 1, ..., 3$
+
+**Função objetivo**
+
+Minimiza o custo de produção e custo de estoque
+
+\begin{equation}
+Min \quad \sum_{i = 1}^{2}\sum_{t = 1}^{3} [s_{it}E_{it} + c_{it}\sum_{k = 1}^{2}(a_{ik}x_{kt})]
+\end{equation}
+
+**Restrições**
+
+R1: Calculo do estoque
+
+- Semana 1:
+
+\begin{equation}
+E_{i1} = I_{i} + x_{i1} - d_{i1}, \quad i = 1, 2
+\end{equation}
+
+- Demais semanas:
+\begin{equation}
+E_{it} = \sum_{b = 1}^{t}(E_{ib-1} + x_{ib} - d_{ib}) \quad i = 1, 2, \quad t = 2, 3 
+\end{equation}
+
+Observe que para as demais semanas, o t inicia em 2.
+
+-R2 : garante que a demanda de chapas do tipo  i da semana t seja atendida
+
+\begin{equation}
+\sum_{k = 1}^{2}(a_{ik}x_{kt}) \geq d_{it}, \quad i = 1, \ldots, 2, \quad t = 1, \ldots 3
+\end{equation}
+
+
+**Domínio das variáveis de decisão**
+\begin{equation}
+x_{ik} \geq 0, \quad i = 1, \ldots, 2, \quad k = 1, \ldots, 2
+\end{equation}
+
+\begin{equation}
+I_{it} \geq 0 \quad i = 1, \ldots, 2, \quad t = 1, \ldots, 3
+\end{equation}
