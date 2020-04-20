@@ -12,23 +12,23 @@ def main():
 
     # matrix with production costs
     p = [
-        [13, 9],  # Week1
-        [10, 6],  # Week2
-        [20, 8]  # Week3
+        [13, 9],  # week1
+        [10, 6],  # week2
+        [20, 8]  # week3
     ]
 
     # matrix with stock costs
     s = [
-        [9, 7],  # Week1
-        [9, 7],  # Week2
-        [9, 7]  # Week3
+        [9, 7],  # week1
+        [9, 7],  # week2
+        [9, 7]  # week3
     ]
 
     # matrix with demands
     d = [
-        [2000, 2000],  # Week1
-        [1500, 1700],  # Week2
-        [900, 1200]  # Week3
+        [2000, 2000],  # week1
+        [1500, 1700],  # week2
+        [900, 1200]  # week3
     ]
 
     n_weeks = len(p)
@@ -55,7 +55,6 @@ def main():
             solver.Add(r[m][n] >= d[m][n])
 
     # matrix production costs
-    objective_function = 0
     c = [
         [p[0][0] + 2 * p[0][1], 2 * p[0][0] + 2 * p[0][1]],
         [p[1][0] + 2 * p[1][1], 2 * p[1][0] + 2 * p[1][1]],
@@ -63,18 +62,19 @@ def main():
     ]
 
     # matrix stock costs
-    d = [
+    e = [
         [initial_lot_1, initial_lot_2],
         [x[0, 0] + 2 * x[0, 1] - d[0][0], 2 * x[0, 0] + 2 * x[0, 1] - d[0][1]],
         [x[1, 0] + 2 * x[1, 1] + x[0, 0] + 2 * x[0, 1] - d[0][0] - d[1][0],
          2 * x[1, 0] + 2 * x[1, 1] + 2 * x[0, 0] + 2 * x[0, 1] - d[0][1] - d[1][1]]
     ]
 
+    # objective function
+    objective_function = 0
     for m in range(0, n_weeks):
         for n in range(0, n_cut_types):
-            objective_function += (x[m, n] * c[m][n] + s[m][n] * d[m][n])
+            objective_function += (x[m, n] * c[m][n] + s[m][n] * e[m][n])
 
-    # objective function
     solver.Minimize(objective_function)
 
     status = solver.Solve()
